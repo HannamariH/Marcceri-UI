@@ -1,38 +1,61 @@
-.App {
-  text-align: center;
+@font-face {
+    font-family: 'Lato';
+    /*src: url(fonts/LatoLatin-Regular.eot);*/
+    src: /*url(fonts/LatoLatin-Regular.eot?#iefix) format("embedded-opentype"),*/url(fonts/lato-regular-webfont.woff2) format("woff2"),url(fonts/lato-regular-webfont.woff) format("woff"),url(fonts/Lato-Regular.ttf) format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    text-rendering:optimizeLegibility
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@font-face {
+    font-family: 'Lato';
+    /*src: url(fonts/LatoLatin-Italic.eot);*/
+    src: /*url(fonts/LatoLatin-Italic.eot?#iefix) format("embedded-opentype"),*/url(fonts/lato-italic-webfont.woff2) format("woff2"),url(fonts/lato-italic-webfont.woff) format("woff"),url(fonts/Lato-Italic.ttf) format("truetype");
+    font-style: italic;
+    font-weight: 400;
+    text-rendering:optimizeLegibility
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+@font-face {
+    font-family: 'Lato';
+    /*src: url(fonts/LatoLatin-Bold.eot);*/
+    src: /*url(fonts/LatoLatin-Bold.eot?#iefix) format("embedded-opentype"),*/url(fonts/lato-bold-webfont.woff2) format("woff2"),url(fonts/lato-bold-webfont.woff) format("woff"),url(fonts/Lato-Bold.ttf) format("truetype");
+    font-style: normal;
+    font-weight: 700;
+    text-rendering:optimizeLegibility
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@font-face {
+    font-family: 'Lato';
+    /*src: url(fonts/LatoLatin-BoldItalic.eot);*/
+    src: /*url(fonts/LatoLatin-BoldItalic.eot?#iefix) format("embedded-opentype"),*/url(fonts/lato-bolditalic-webfont.woff2) format("woff2"),url(fonts/lato-bolditalic-webfont.woff) format("woff"),url(fonts/Lato-BoldItalic.ttf) format("truetype");
+    font-style: italic;
+    font-weight: 700;
+    text-rendering:optimizeLegibility
 }
 
-.App-link {
-  color: #61dafb;
+@font-face {
+    font-family: 'Aleo';
+    /*src: url(fonts/aleo-regular-webfont.eot);*/
+    src: /*url(fonts/aleo-regular-webfont.eot?#iefix) format("embedded-opentype"), */url(fonts/aleo-regular-webfont.woff2) format("woff2"),url(fonts/aleo-regular-webfont.woff) format("woff"),url(fonts/aleo-regular-webfont.ttf) format("truetype");
+    font-style: normal;
+    font-weight: 400;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar-custom {
+    background-color: #FF5438;
+}
+
+h1 {
+    /*color: #002A57;*/
+    padding-left: 1em;
+    font-family: 'Aleo', 'Lato','Helvetica Neue',Arial,sans-serif;
+}
+
+.select-custom {
+    width: auto;
+}
+
+.stack-custom {
+    padding-top: 2em;
 }
