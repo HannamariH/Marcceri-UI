@@ -5,6 +5,9 @@ import Form from "react-bootstrap/Form"
 import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Stack from "react-bootstrap/Stack"
+import CustomAlert from "./components/CustomAlert"
+import MarcList from "./components/MarcList"
+import BiblioList from "./components/BiblioList"
 import React, { useState } from 'react'
 import axios from 'axios'
 
@@ -12,11 +15,32 @@ const App = () => {
 
   const [file, setFile] = useState()
   const [vendor, setVendor] = useState()
+  const [umSuccess, setUmSuccess] = useState()
+  const [conversionMessage, setConversionMessage] = useState("")
+  const [convertedTitles, setConvertedTitles] = useState([])
+  const [kohaSuccess, setKohaSuccess] = useState()
 
   const handleFile = (event) => {
-    //TODO: check if file is in right format! (xml, joku marc-formaatti?, zip)
-    setFile(event.target.files[0])
-    console.log(event.target.files[0].name)
+    const file = event.target.files[0]
+    console.log("file.type", file.type)
+    if (fileTypeValid(file)) {
+      setFile(file)
+      console.log(file.name)
+    } else {
+      //TODO: parempi virheilmoitus
+      alert(`wrong file type! ${file.type}`)
+      event.target.value = null
+    }
+  }
+
+  const fileTypeValid = (file) => {
+    //TODO: marc-tiedosto ei olekaan tyyppiä "application/marc"! ei näytä olevan tyyppiä ollenkaan...
+    //TODO: onko hyväksyttävä .mrc-päätteen tarkistus?
+    if (file.name.substring(file.name.lastIndexOf(".")) === ".mrc") {
+      return true
+    }
+    const validTypes = ["application/marc", "application/marcxml+xml", "text/xml", "application/zip", /*"multipart/mixed" zip??*/]
+    return validTypes.includes(file.type)
   }
 
   const handleVendor = (event) => {
@@ -24,39 +48,78 @@ const App = () => {
     console.log(event.target.value)
   }
 
-  const sendFile = () => {
+  const sendFile = async () => {
     if (file === undefined) {
+      //TODO: parempi virheilmoitus
       console.log("choose a file first")
     } else {
-      //TODO: axios post
-      setFile()
+
+      //TODO alla oleva näkyy toimivan, kun buttonin input type on submit. Se myös nollaa samalla kaiken ui:sta.
+      //event.target.reset()
+      /*setFile()
       setVendor()
+      setUmSuccess(true)*/
+
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("ini", vendor)
+
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/convert",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+      }).then((response) => {
+        console.log(response)
+        setFile()
+        setVendor()
+        setUmSuccess(true)
+        setConversionMessage(response.data.data)
+        setConvertedTitles(response.data.titles)
+      }).catch(error => {
+        console.log(error)
+        setUmSuccess(false)
+      })
+
       //TODO: miten tyhjennetään tiedoston nimi fileuploadista?
-      console.log("File sent!")      
+      console.log("File sent!")
     }
+  }
+
+  const postToKoha = () => {
+    setKohaSuccess(true)
   }
 
   return (
     <>
-      <Navbar className="navbar-custom"><Container><h1>Marc-muuntaja</h1></Container></Navbar>
+      <Navbar className="navbar-custom"><Container><h1>Marcceri</h1></Container></Navbar>
       <Form>
         <Stack gap={3} className="stack-custom">
-        <Container>
-          <label htmlFor="fileupload">Marc-tiedosto</label> <br />
-          <input id="fileupload" type="file" onChange={handleFile}></input>
-        </Container>
-        <Container>
-          <label htmlFor="selectVendor">Toimittaja</label>
-          <Form.Select className="select-custom" id="selectVendor" onChange={handleVendor}>
-            <option>Valitse...</option>
-            <option value="1">Ebsco</option>
-            <option value="2">Taylor & Francis</option>
-            <option value="3">VLeBooks</option>
-          </Form.Select>
-        </Container>
-        <Container>
-          <Button variant="secondary" onClick={sendFile}>Muunna</Button>
-        </Container>
+          <Container>
+            <label htmlFor="fileupload" className="mb-2">Marc-tiedosto (mrc-, xml- tai zip-muodossa)</label> <br />
+            <input id="fileupload" type="file" onChange={handleFile}></input>
+          </Container>
+          <Container>
+            <label htmlFor="selectVendor">Toimittaja</label>
+            <Form.Select className="select-custom" id="selectVendor" onChange={handleVendor}>
+              <option>Valitse...</option>
+              <option value="ebsco.ini">Ebsco</option>
+              <option value="taylorfrancis.ini">Taylor & Francis</option>
+              <option value="vlebooks.ini">VLeBooks</option>
+            </Form.Select>
+          </Container>
+          <Container>
+            <Button variant="secondary" /*type="submit"*/ onClick={sendFile}>Muunna</Button>
+          </Container>
+        </Stack>
+      </Form>
+      <Form>
+        <Stack gap={3} className="stack-custom">
+          <Container><CustomAlert umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+          <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha}></MarcList></Container>
+          <Container><BiblioList kohaSuccess={kohaSuccess}></BiblioList></Container>
         </Stack>
       </Form>
     </>
