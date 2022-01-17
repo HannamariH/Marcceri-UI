@@ -19,6 +19,7 @@ const App = () => {
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
   const [kohaSuccess, setKohaSuccess] = useState()
+  const [biblionumbers, setBiblionumbers] = useState([])
 
   const handleFile = (event) => {
     const file = event.target.files[0]
@@ -89,7 +90,19 @@ const App = () => {
   }
 
   const postToKoha = () => {
-    setKohaSuccess(true)
+
+    axios({
+      method: "POST",
+      //TODO: portti 4000 pelkkään nodeen, 3000 dockeroituun usemarconiin!
+      url: "http://localhost:3000/tokoha",
+    }).then((response) => {
+      setKohaSuccess(true)
+      setBiblionumbers(response.data.biblionumbers)
+      console.log(response.data.biblionumbers)
+    }).catch(error => {
+      console.log(error)
+      setKohaSuccess(false)
+    })
   }
 
   return (
@@ -119,7 +132,7 @@ const App = () => {
         <Stack gap={3} className="stack-custom">
           <Container><CustomAlert umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
           <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha}></MarcList></Container>
-          <Container><BiblioList kohaSuccess={kohaSuccess}></BiblioList></Container>
+          <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers}></BiblioList></Container>
         </Stack>
       </Form>
     </>
