@@ -20,6 +20,7 @@ const App = () => {
   const [convertedTitles, setConvertedTitles] = useState([])
   const [kohaSuccess, setKohaSuccess] = useState()
   const [biblionumbers, setBiblionumbers] = useState([])
+  const [checked, setChecked] = useState([])
 
   const handleFile = (event) => {
     const file = event.target.files[0]
@@ -73,19 +74,18 @@ const App = () => {
           "Content-Type": "multipart/form-data"
         },
       }).then((response) => {
-        console.log(response)
         setFile()
         setVendor()
         setUmSuccess(true)
         setConversionMessage(response.data.data)
         setConvertedTitles(response.data.titles)
+        setChecked(new Array(response.data.titles.length).fill(true))
       }).catch(error => {
         console.log(error)
         setUmSuccess(false)
       })
 
-      //TODO: miten tyhjennetään tiedoston nimi fileuploadista?
-      console.log("File sent!")
+      //TODO: miten ja missä vaiheessa tyhjennetään tiedoston nimi fileuploadista (tai koko lomake)?
     }
   }
 
@@ -108,7 +108,7 @@ const App = () => {
 
   return (
     <>
-      <Navbar className="navbar-custom"><Container><h1>Marcceri</h1></Container></Navbar>
+      <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
       <Form>
         <Stack gap={3} className="stack-custom">
           <Container>
@@ -132,8 +132,8 @@ const App = () => {
       <Form>
         <Stack gap={3} className="stack-custom">
           <Container><CustomAlert umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
-          <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha}></MarcList></Container>
-          <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers}></BiblioList></Container>
+          <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
+          <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
         </Stack>
       </Form>
     </>

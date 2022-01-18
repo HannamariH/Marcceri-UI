@@ -1,15 +1,7 @@
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import { useEffect, useState } from 'react'
 
-
-const MarcList = ({ umSuccess, convertedTitles, postToKoha }) => {
-
-    const [checked, setChecked] = useState([])
-
-    useEffect(() => {
-        setChecked(new Array(convertedTitles.length).fill(true))
-    }, [convertedTitles])
+const MarcList = ({ umSuccess, convertedTitles, postToKoha, checked, setChecked}) => {
 
     const handleRadioChange = (index) => {
         const updatedChecked = checked.map((item, i) => i === index ? !item : item)
