@@ -1,28 +1,39 @@
 import Form from "react-bootstrap/Form"
-import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
-import Stack from "react-bootstrap/Stack"
+import { useEffect, useState } from 'react'
 
 
 const MarcList = ({ umSuccess, convertedTitles, postToKoha }) => {
+
+    const [checked, setChecked] = useState([])
+
+    useEffect(() => {
+        setChecked(new Array(convertedTitles.length).fill(true))
+    }, [convertedTitles])
+
+    const handleRadioChange = (index) => {
+        const updatedChecked = checked.map((item, i) => i === index ? !item : item)
+        setChecked(updatedChecked)
+    }
 
     if (umSuccess) {
         return (
             <>
                 <p>Konvertoidut tietueet</p>
                 {
-                    convertedTitles.map(title =>
+                    convertedTitles.map((title, index) =>
                         <Form.Check
                             type="checkbox"
                             id="default-checkbox"
                             className="mb-3"
                             label={title}
-                            key={title}
+                            key={index}
                             defaultChecked
+                            onChange={() => handleRadioChange(index)}
                         />
                     )
                 }
-                <Button variant="secondary" /*type="submit"*/ onClick={postToKoha}>Tallenna valitut Kohaan</Button>
+                <Button variant="secondary" /*type="submit"*/ onClick={() => postToKoha(checked)}>Tallenna valitut Kohaan</Button>
             </>
         )
     }

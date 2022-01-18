@@ -6,9 +6,9 @@ const BiblioList = ({ kohaSuccess, biblionumbers }) => {
         return <ListGroup>
             <p>Seuraavat tietueet tallennettu Kohaan</p>
             {                
-                biblionumbers.map(biblionumber => 
+                biblionumbers.map((biblionumber, index) => 
                     <ListGroup.Item>
-                        <a href={`https://app1.jyu.koha.csc.fi/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`}>Linkki Kohaan</a>
+                        <a href={`https://app1.jyu.koha.csc.fi/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`} key={index}>Linkki Kohaan</a>
                     </ListGroup.Item>
                 )
             }

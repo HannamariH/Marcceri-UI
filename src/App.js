@@ -89,12 +89,13 @@ const App = () => {
     }
   }
 
-  const postToKoha = () => {
+  const postToKoha = (bibliosToPost) => {
 
     axios({
       method: "POST",
       //TODO: portti 4000 pelkkään nodeen, 3000 dockeroituun usemarconiin!
       url: "http://localhost:3000/tokoha",
+      data: bibliosToPost
     }).then((response) => {
       setKohaSuccess(true)
       setBiblionumbers(response.data.biblionumbers)
