@@ -56,12 +56,6 @@ const App = () => {
       console.log("choose a file first")
     } else {
 
-      //TODO alla oleva näkyy toimivan, kun buttonin input type on submit. Se myös nollaa samalla kaiken ui:sta.
-      //event.target.reset()
-      /*setFile()
-      setVendor()
-      setUmSuccess(true)*/
-
       const formData = new FormData()
       formData.append("file", file)
       formData.append("ini", vendor)
@@ -86,10 +80,17 @@ const App = () => {
       })
 
       //TODO: miten ja missä vaiheessa tyhjennetään tiedoston nimi fileuploadista (tai koko lomake)?
+      //vasta Tyhjennä-nappulalla??
     }
   }
 
   const postToKoha = (bibliosToPost) => {
+
+    if (!bibliosToPost.includes(true)) {
+      //TODO: parempi virheilmoitus?
+      alert("Valitse ainakin yksi tietue!")
+      return
+    }
 
     axios({
       method: "POST",
@@ -125,7 +126,7 @@ const App = () => {
             </Form.Select>
           </Container>
           <Container>
-            <Button variant="secondary" /*type="submit"*/ onClick={sendFile}>Muunna</Button>
+            <Button variant="secondary" onClick={sendFile}>Muunna</Button>
           </Container>
         </Stack>
       </Form>
@@ -134,6 +135,9 @@ const App = () => {
           <Container><CustomAlert umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
           <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
+          <Container>
+            <Button variant="secondary" type="submit">Tyhjennä</Button>
+          </Container>
         </Stack>
       </Form>
     </>
