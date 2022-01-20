@@ -21,12 +21,14 @@ const App = () => {
   const [kohaSuccess, setKohaSuccess] = useState()
   const [biblionumbers, setBiblionumbers] = useState([])
   const [checked, setChecked] = useState([])
+  const [fileType, setFileType] = useState()
 
   const handleFile = (event) => {
     const file = event.target.files[0]
     console.log("file.type", file.type)
     if (fileTypeValid(file)) {
       setFile(file)
+      setFileType(file.type)
       console.log(file.name)
     } else {
       //TODO: parempi virheilmoitus
@@ -59,6 +61,7 @@ const App = () => {
       const formData = new FormData()
       formData.append("file", file)
       formData.append("ini", vendor)
+      formData.append("filetype", fileType)
 
       axios({
         method: "POST",
@@ -136,7 +139,7 @@ const App = () => {
           <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
           <Container>
-            <Button variant="secondary" type="submit">Tyhjennä</Button>
+            <Button variant="secondary" type="submit" className="mb-5">Aloita alusta</Button>
           </Container>
         </Stack>
       </Form>

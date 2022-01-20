@@ -2,7 +2,6 @@ import Alert from "react-bootstrap/Alert"
 
 const CustomAlert = ({ umSuccess, conversionMessage }) => {
     if (umSuccess) {
-        //return <Alert>Konversion tulos: {conversionMessage}</Alert>
         return (
             <div className="alert alert-success" role="alert">
                 <h4 className="alert-heading">Konversion tulos:</h4>
@@ -11,7 +10,7 @@ const CustomAlert = ({ umSuccess, conversionMessage }) => {
         )
     }
     if (umSuccess === false) {
-        return <Alert variant="danger">Tietueiden konvertointi epäonnistui!</Alert>
+        return <Alert variant="danger">Tietueiden konvertointi epäonnistui! Tarkista, että tiedosto on validia marc- tai marcxml-muotoa.</Alert>
     }
     return <></>
 }
