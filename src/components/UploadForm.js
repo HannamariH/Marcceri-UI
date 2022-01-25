@@ -15,7 +15,13 @@ const UploadForm = ({ handleFile, handleVendor, sendFile }) => {
                     <label htmlFor="selectVendor">Toimittaja</label>
                     <Form.Select className="select-custom" id="selectVendor" onChange={handleVendor}>
                         <option>Valitse...</option>
+                        <option value="ebc-dda.ini">Ebc-dda</option>
+                        <option value="ebc-owned.ini">Ebc-owned</option>
+                        <option value="ebc.ini">Ebc</option>
                         <option value="ebsco.ini">Ebsco</option>
+                        <option value="ebsco-owned.ini">Ebsco-owned</option>
+                        <option value="ebsco-pda.ini">Ebsco-pda</option>
+                        <option value="emerald.ini">Emerald</option>
                         <option value="taylorfrancis.ini">Taylor & Francis</option>
                         <option value="vlebooks.ini">VLeBooks</option>
                     </Form.Select>
