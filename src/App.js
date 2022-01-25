@@ -16,6 +16,7 @@ const App = () => {
   const [file, setFile] = useState()
   const [vendor, setVendor] = useState()
   const [umSuccess, setUmSuccess] = useState()
+  const [marcSent, setMarcSent] = useState(false)
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
   const [kohaSuccess, setKohaSuccess] = useState()
@@ -57,7 +58,7 @@ const App = () => {
       //TODO: parempi virheilmoitus
       console.log("choose a file first")
     } else {
-
+      setMarcSent(true)
       const formData = new FormData()
       formData.append("file", file)
       formData.append("ini", vendor)
@@ -135,7 +136,7 @@ const App = () => {
       </Form>
       <Form>
         <Stack gap={3} className="stack-custom">
-          <Container><CustomAlert umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+          <Container><CustomAlert marcSent={marcSent} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
           <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
           <Container>

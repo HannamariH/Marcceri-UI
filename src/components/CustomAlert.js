@@ -1,6 +1,9 @@
 import Alert from "react-bootstrap/Alert"
 
-const CustomAlert = ({ umSuccess, conversionMessage }) => {
+const CustomAlert = ({ marcSent, umSuccess, conversionMessage }) => {
+    if (marcSent && umSuccess === undefined) {
+        return <Alert variant="info">Tietueiden konvertointi käynnissä...</Alert>
+    }
     if (umSuccess) {
         return (
             <div className="alert alert-success" role="alert">
