@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form"
 import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Stack from "react-bootstrap/Stack"
+import UploadForm from "./components/UploadForm"
 import CustomAlert from "./components/CustomAlert"
 import MarcList from "./components/MarcList"
 import BiblioList from "./components/BiblioList"
@@ -114,26 +115,7 @@ const App = () => {
   return (
     <>
       <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
-      <Form>
-        <Stack gap={3} className="stack-custom">
-          <Container>
-            <label htmlFor="fileupload" className="mb-2">Marc-tiedosto (mrc-, xml- tai zip-muodossa)</label> <br />
-            <input id="fileupload" type="file" onChange={handleFile}></input>
-          </Container>
-          <Container>
-            <label htmlFor="selectVendor">Toimittaja</label>
-            <Form.Select className="select-custom" id="selectVendor" onChange={handleVendor}>
-              <option>Valitse...</option>
-              <option value="ebsco.ini">Ebsco</option>
-              <option value="taylorfrancis.ini">Taylor & Francis</option>
-              <option value="vlebooks.ini">VLeBooks</option>
-            </Form.Select>
-          </Container>
-          <Container>
-            <Button variant="secondary" onClick={sendFile}>Muunna</Button>
-          </Container>
-        </Stack>
-      </Form>
+      <UploadForm handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
       <Form>
         <Stack gap={3} className="stack-custom">
           <Container><CustomAlert marcSent={marcSent} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
