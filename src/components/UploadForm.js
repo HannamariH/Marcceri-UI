@@ -3,7 +3,8 @@ import Form from "react-bootstrap/Form"
 import Container from "react-bootstrap/Container"
 import Stack from "react-bootstrap/Stack"
 
-const UploadForm = ({ handleFile, handleVendor, sendFile }) => {
+const UploadForm = ({ marcSent, handleFile, handleVendor, sendFile }) => {
+    if (marcSent) return <></>
     return (
         <Form>
             <Stack gap={3} className="stack-custom">

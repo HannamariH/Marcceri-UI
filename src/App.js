@@ -20,10 +20,17 @@ const App = () => {
   const [marcSent, setMarcSent] = useState(false)
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
+  const [postedToKoha, setPostedToKoha] = useState(false)
   const [kohaSuccess, setKohaSuccess] = useState()
   const [biblionumbers, setBiblionumbers] = useState([])
   const [checked, setChecked] = useState([])
   const [fileType, setFileType] = useState()
+  const [authorized, setAuthorized] = useState()
+
+  const checkUser = () => {
+    //TODO: tarkista apista, onko pyynnön headerissa oleva s-posti config-tiedostossa
+    //setAuthorized
+  }
 
   const handleFile = (event) => {
     const file = event.target.files[0]
@@ -83,9 +90,6 @@ const App = () => {
         console.log(error)
         setUmSuccess(false)
       })
-
-      //TODO: miten ja missä vaiheessa tyhjennetään tiedoston nimi fileuploadista (tai koko lomake)?
-      //vasta Tyhjennä-nappulalla??
     }
   }
 
@@ -97,6 +101,8 @@ const App = () => {
       return
     }
 
+    setPostedToKoha(true)
+
     axios({
       method: "POST",
       //TODO: portti 4000 pelkkään nodeen, 3000 dockeroituun usemarconiin!
@@ -107,19 +113,19 @@ const App = () => {
       setBiblionumbers(response.data.biblionumbers)
       console.log(response.data.biblionumbers)
     }).catch(error => {
-      console.log(error)
-      setKohaSuccess(false)
+      console.log(error.response.data.error)
+      setKohaSuccess(error.response.data.error)
     })
   }
 
   return (
     <>
       <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
-      <UploadForm handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
+      <UploadForm marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
       <Form>
         <Stack gap={3} className="stack-custom">
-          <Container><CustomAlert marcSent={marcSent} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
-          <Container><MarcList umSuccess={umSuccess} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
+          <Container><CustomAlert marcSent={marcSent} postedToKoha={postedToKoha} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+          <Container><MarcList umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
           <Container>
             <Button variant="secondary" type="submit" className="mb-5">Aloita alusta</Button>

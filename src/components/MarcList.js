@@ -1,12 +1,13 @@
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
-const MarcList = ({ umSuccess, convertedTitles, postToKoha, checked, setChecked}) => {
+const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checked, setChecked}) => {
 
     const handleRadioChange = (index) => {
         const updatedChecked = checked.map((item, i) => i === index ? !item : item)
         setChecked(updatedChecked)
     }
+    if (postedToKoha) return <></>
 
     if (umSuccess) {
         return (

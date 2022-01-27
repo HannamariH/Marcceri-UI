@@ -1,6 +1,7 @@
 import Alert from "react-bootstrap/Alert"
 
-const CustomAlert = ({ marcSent, umSuccess, conversionMessage }) => {
+const CustomAlert = ({ postedToKoha, marcSent, umSuccess, conversionMessage }) => {
+    if (postedToKoha) return <></>
     if (marcSent && umSuccess === undefined) {
         return <Alert variant="info">Tietueiden konvertointi käynnissä...</Alert>
     }

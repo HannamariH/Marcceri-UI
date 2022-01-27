@@ -1,4 +1,5 @@
 import ListGroup from "react-bootstrap/ListGroup"
+import Alert from "react-bootstrap/Alert"
 
 const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) => {
 
@@ -10,7 +11,7 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
         }
     }
 
-    if (kohaSuccess) {
+    if (kohaSuccess == true) {
         return (
             <div>
                 <p>Seuraavat tietueet tallennettu Kohaan:</p>
@@ -28,8 +29,10 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
                     }
                 </ListGroup></div>)
     }
+    if (kohaSuccess) {
+        return <Alert variant="danger">{kohaSuccess}</Alert>
+    }
     return <></>
-
 }
 
 export default BiblioList
