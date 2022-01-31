@@ -13,8 +13,6 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
 
     if (kohaSuccess === true) {
         return (
-            <div>
-                <p>Seuraavat tietueet tallennettu Kohaan:</p>
                 <ListGroup className="pb-5">
                     {
                         biblionumbers.map((biblionumber, index) => {
@@ -27,7 +25,7 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
                                 </ListGroup.Item>)
                         })
                     }
-                </ListGroup></div>)
+                </ListGroup>)
     }
     if (kohaSuccess) {
         return <Alert variant="danger">{kohaSuccess}</Alert>

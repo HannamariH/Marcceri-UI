@@ -1,10 +1,16 @@
 import Alert from "react-bootstrap/Alert"
 
-const CustomAlert = ({ postedToKoha, marcSent, umSuccess, conversionMessage }) => {
-    if (postedToKoha) return <></>
+const CustomAlert = ({ postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
     if (marcSent && umSuccess === undefined) {
         return <Alert variant="info">Tietueiden konvertointi käynnissä...</Alert>
     }
+    if (kohaSuccess) {
+        return <Alert variant="success">Seuraavat tietueet tallennettu Kohaan:</Alert>
+    }
+    if (postedToKoha && !kohaSuccess) {
+        return <Alert variant="info">Tietueiden tallennus Kohaan käynnissä...</Alert>
+    }    
+    if (postedToKoha) return <></>
     if (umSuccess) {
         return (
             <div className="alert alert-success" role="alert">

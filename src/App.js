@@ -130,11 +130,11 @@ const App = () => {
   return (
     <>
       <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
-      <Container><Alert variant="danger" className="mt-5" style={{ display: authorized ? 'none' : 'block' }}>Sinulla ei ole oikeutta käyttää Marcceria.</Alert></Container>
+      <Container><Alert variant="danger" className="mt-5" style={{ display: authorized ? 'none' : 'block' }}>Sinulla ei ole oikeutta Marccerin käyttöön.</Alert></Container>
       <UploadForm authorized={authorized} marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
       <Form style={{ display: authorized ? 'block' : 'none' }}>
         <Stack gap={3} className="stack-custom">
-          <Container><CustomAlert marcSent={marcSent} postedToKoha={postedToKoha} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+          <Container><CustomAlert marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
           <Container><MarcList umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
           <Container><Button variant="secondary" type="submit" className="mb-5">Aloita alusta</Button></Container>
