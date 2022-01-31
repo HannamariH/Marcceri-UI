@@ -11,7 +11,7 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
         }
     }
 
-    if (kohaSuccess == true) {
+    if (kohaSuccess === true) {
         return (
             <div>
                 <p>Seuraavat tietueet tallennettu Kohaan:</p>
