@@ -9,7 +9,7 @@ const UploadForm = ({ authorized, marcSent, handleFile, handleVendor, sendFile }
 
     return (
         <Form>
-            <Stack gap={3} className="stack-custom">
+            <Stack gap={3}>
                 <Container>
                     <label htmlFor="fileupload" className="mb-2">Marc-tiedosto (mrc-, xml- tai zip-muodossa)</label> <br />
                     <input id="fileupload" type="file" onChange={handleFile}></input>

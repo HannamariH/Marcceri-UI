@@ -5,7 +5,6 @@ import Form from "react-bootstrap/Form"
 import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Stack from "react-bootstrap/Stack"
-import Alert from "react-bootstrap/Alert"
 import UploadForm from "./components/UploadForm"
 import CustomAlert from "./components/CustomAlert"
 import MarcList from "./components/MarcList"
@@ -15,16 +14,18 @@ import axios from 'axios'
 
 const App = () => {
 
+  //tarkistaa, että käyttäjän sähköpostiosoite on sallittujen joukossa (ja että api on käynnissä)
   const checkUser = () => {
-    //TODO: tarkista apista, onko pyynnön headerissa oleva s-posti config-tiedostossa
-    //setAuthorized
-    console.log("checkUser")
     axios.get("http://localhost:3000/")
-      .then((response) => {
+      .then(() => {
         setAuthorized(true)
       })
       .catch((error) => {
-        setAuthorized(false)
+        if (error.response && error.response.status === 403) {
+          setAuthorized(false)
+        } else {
+          setApiError(true)
+        }
       })
   }
 
@@ -40,6 +41,7 @@ const App = () => {
   const [checked, setChecked] = useState([])
   const [fileType, setFileType] = useState()
   const [authorized, setAuthorized] = useState(checkUser)
+  const [apiError, setApiError] = useState(false)
 
   const handleFile = (event) => {
     const file = event.target.files[0]
@@ -49,19 +51,17 @@ const App = () => {
       setFileType(file.type)
       console.log(file.name)
     } else {
-      //TODO: parempi virheilmoitus
       alert(`Virheellinen tiedostotyyppi! ${file.type}`)
       event.target.value = null
     }
   }
 
   const fileTypeValid = (file) => {
-    //TODO: marc-tiedosto ei olekaan tyyppiä "application/marc"! ei näytä olevan tyyppiä ollenkaan...
-    //TODO: onko hyväksyttävä .mrc-päätteen tarkistus?
+    //marc-tiedosto tarkistettava päätteen mukaan (tiedostolla ei tyyppiä)
     if (file.name.substring(file.name.lastIndexOf(".")) === ".mrc") {
       return true
     }
-    const validTypes = ["application/marc", "application/marcxml+xml", "text/xml", "application/zip", /*"multipart/mixed" zip??*/]
+    const validTypes = ["application/marc", "application/marcxml+xml", "text/xml", "application/zip"]
     return validTypes.includes(file.type)
   }
 
@@ -71,9 +71,8 @@ const App = () => {
   }
 
   const sendFile = async () => {
-    if (file === undefined) {
-      //TODO: parempi virheilmoitus
-      console.log("choose a file first")
+    if (file === undefined || vendor === undefined) {
+      alert("Valitse tiedosto ja/tai toimittaja!")
     } else {
       setMarcSent(true)
       const formData = new FormData()
@@ -105,7 +104,6 @@ const App = () => {
   const postToKoha = (bibliosToPost) => {
 
     if (!bibliosToPost.includes(true)) {
-      //TODO: parempi virheilmoitus?
       alert("Valitse ainakin yksi tietue!")
       return
     }
@@ -127,19 +125,19 @@ const App = () => {
     })
   }
 
+
   return (
     <>
       <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
-      <Container><Alert variant="danger" className="mt-5" style={{ display: authorized ? 'none' : 'block' }}>Sinulla ei ole oikeutta Marccerin käyttöön.</Alert></Container>
-      <UploadForm authorized={authorized} marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
-      <Form style={{ display: authorized ? 'block' : 'none' }}>
-        <Stack gap={3} className="stack-custom">
-          <Container><CustomAlert marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+      <Stack gap={3}>
+        <Container><CustomAlert authorized={authorized} apiError={apiError} marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+        <UploadForm authorized={authorized} marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
+        <Form style={{ display: authorized ? 'block' : 'none' }}>
           <Container><MarcList umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
           <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
-          <Container><Button variant="secondary" type="submit" className="mb-5">Aloita alusta</Button></Container>
-        </Stack>
-      </Form>
+          <Container><Button variant="secondary" type="submit" className="mb-5 mt-5">Aloita alusta</Button></Container>
+        </Form>
+      </Stack>
     </>
   )
 }

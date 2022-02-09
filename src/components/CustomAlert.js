@@ -1,6 +1,13 @@
 import Alert from "react-bootstrap/Alert"
 
-const CustomAlert = ({ postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
+const CustomAlert = ({ authorized, apiError, postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
+
+    if (apiError) {
+        return <Alert variant="danger">Virhe Marccerin toiminnassa.</Alert>
+    }
+    if (!authorized && !apiError) {
+        return <Alert variant="danger">Sinulla ei ole oikeutta Marccerin käyttöön.</Alert>
+    }
     if (marcSent && umSuccess === undefined) {
         return <Alert variant="info">Tietueiden konvertointi käynnissä...</Alert>
     }

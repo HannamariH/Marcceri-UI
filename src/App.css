@@ -56,10 +56,6 @@ h1 {
     width: auto;
 }
 
-.stack-custom {
-    padding-top: 2em;
-}
-
 .link {
     text-decoration: none;
     color: #002957;
@@ -68,4 +64,8 @@ h1 {
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.alert {
+    margin-top: 2rem;
 }
