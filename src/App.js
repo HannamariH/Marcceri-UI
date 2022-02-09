@@ -16,7 +16,7 @@ const App = () => {
 
   //tarkistaa, että käyttäjän sähköpostiosoite on sallittujen joukossa (ja että api on käynnissä)
   const checkUser = () => {
-    axios.get("http://localhost:3000/")
+    axios.get("http://localhost:3000/auth")
       .then(() => {
         setAuthorized(true)
       })
