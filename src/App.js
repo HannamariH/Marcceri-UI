@@ -35,6 +35,7 @@ const App = () => {
   const [marcSent, setMarcSent] = useState(false)
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
+  const [conversionError, setConversionError] = useState(false)
   const [postedToKoha, setPostedToKoha] = useState(false)
   const [kohaSuccess, setKohaSuccess] = useState()
   const [biblionumbers, setBiblionumbers] = useState([])
@@ -92,9 +93,11 @@ const App = () => {
         setFile()
         setVendor()
         setUmSuccess(true)
-        setConversionMessage(response.data.data)
+        setConversionMessage(response.data.conversionMessage)
         setConvertedTitles(response.data.titles)
         setChecked(new Array(response.data.titles.length).fill(true))
+        setConversionError(response.data.errors)
+        console.log(response)
       }).catch(error => {
         console.log(error)
         setUmSuccess(false)
@@ -131,7 +134,7 @@ const App = () => {
     <>
       <Navbar className="navbar-custom"><Container><h1><a className="link" href="index.html">Marcceri</a></h1></Container></Navbar>
       <Stack gap={3}>
-        <Container><CustomAlert authorized={authorized} apiError={apiError} marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
+        <Container><CustomAlert authorized={authorized} apiError={apiError} conversionError={conversionError} marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
         <UploadForm authorized={authorized} marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
         <Form style={{ display: authorized ? 'block' : 'none' }}>
           <Container><MarcList umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>

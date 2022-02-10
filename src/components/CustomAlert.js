@@ -1,6 +1,6 @@
 import Alert from "react-bootstrap/Alert"
 
-const CustomAlert = ({ authorized, apiError, postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
+const CustomAlert = ({ authorized, apiError, conversionError, postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
 
     if (apiError) {
         return <Alert variant="danger">Virhe Marccerin toiminnassa.</Alert>
@@ -18,6 +18,14 @@ const CustomAlert = ({ authorized, apiError, postedToKoha, kohaSuccess, marcSent
         return <Alert variant="info">Tietueiden tallennus Kohaan käynnissä...</Alert>
     }    
     if (postedToKoha) return <></>
+    if (umSuccess && conversionError) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                <h4 className="alert-heading">Konversion tulos sisältää virheitä:</h4>
+                <p>{conversionMessage}</p>
+            </div>
+        )
+    }
     if (umSuccess) {
         return (
             <div className="alert alert-success" role="alert">

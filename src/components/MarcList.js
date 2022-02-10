@@ -26,7 +26,7 @@ const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checke
                         />
                     )
                 }
-                <Button variant="secondary" /*type="submit"*/ onClick={() => postToKoha(checked)}>Tallenna valitut Kohaan</Button>
+                <Button variant="secondary" onClick={() => postToKoha(checked)}>Tallenna valitut Kohaan</Button>
             </>
         )
     }
