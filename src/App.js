@@ -79,6 +79,7 @@ const App = () => {
       formData.append("file", file)
       formData.append("ini", vendor)
       formData.append("filetype", fileType)
+      formData.append("filename", file.name)
 
       axios({
         method: "POST",
