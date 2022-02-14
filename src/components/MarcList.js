@@ -7,21 +7,33 @@ const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checke
         const updatedChecked = checked.map((item, i) => i === index ? !item : item)
         setChecked(updatedChecked)
     }
+
+    const toggleAll = () => {
+        const updatedChecked = checked.map((item) => !item)
+        setChecked(updatedChecked)
+    }
     if (postedToKoha) return <></>
 
     if (umSuccess) {
         return (
             <>
                 <p>Konvertoidut tietueet</p>
+                <Form.Check
+                            type="checkbox"
+                            className="mb-5"
+                            label="Valitse kaikki"
+                            key="toggle"
+                            defaultChecked
+                            onChange={() => toggleAll()}
+                        />
                 {
                     convertedTitles.map((title, index) =>
                         <Form.Check
                             type="checkbox"
-                            id="default-checkbox"
                             className="mb-3"
                             label={title}
                             key={index}
-                            defaultChecked
+                            checked={checked[index]}
                             onChange={() => handleRadioChange(index)}
                         />
                     )
@@ -32,6 +44,5 @@ const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checke
     }
     return <></>
 }
-
 
 export default MarcList

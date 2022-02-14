@@ -18,7 +18,7 @@ const CustomAlert = ({ authorized, apiError, conversionError, postedToKoha, koha
         return <Alert variant="info">Tietueiden tallennus Kohaan käynnissä...</Alert>
     }    
     if (postedToKoha) return <></>
-    if (umSuccess && conversionError) {
+    if (umSuccess && conversionError.length !== 0) {
         return (
             <div className="alert alert-danger" role="alert">
                 <h4 className="alert-heading">Konversion tulos sisältää virheitä:</h4>
