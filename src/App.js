@@ -29,21 +29,21 @@ const App = () => {
       })
   }
 
+  const [authorized, setAuthorized] = useState(checkUser)
+  const [apiError, setApiError] = useState(false)
   const [file, setFile] = useState()
+  const [fileType, setFileType] = useState()
   const [vendor, setVendor] = useState()
   const [umSuccess, setUmSuccess] = useState()
   const [marcSent, setMarcSent] = useState(false)
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
   const [conversionError, setConversionError] = useState([])
+  const [checked, setChecked] = useState("")
   const [postedToKoha, setPostedToKoha] = useState(false)
   const [kohaSuccess, setKohaSuccess] = useState()
   const [biblionumbers, setBiblionumbers] = useState([])
-  const [checked, setChecked] = useState("")
-  const [fileType, setFileType] = useState()
-  const [authorized, setAuthorized] = useState(checkUser)
-  const [apiError, setApiError] = useState(false)
-
+  
   const handleFile = (event) => {
     const file = event.target.files[0]
     console.log("file.type", file.type)
@@ -71,6 +71,16 @@ const App = () => {
     console.log(event.target.value)
   }
 
+  const removeErroneousTitles = (titles, recordsWithError) => {
+    console.log("aluksi titles", titles)
+    for (let i = 0; i < recordsWithError.length; i++) {
+      const index = recordsWithError[i]
+      titles.splice(index-1, 1)
+      console.log("lopuksi titles", titles)
+    }
+    return titles
+  }
+
   const sendFile = async () => {
     if (file === undefined || vendor === undefined) {
       alert("Valitse tiedosto ja/tai toimittaja!")
@@ -94,9 +104,14 @@ const App = () => {
         setVendor()
         setUmSuccess(true)
         setConversionMessage(response.data.conversionMessage)
-        setConvertedTitles(response.data.titles)
+        if (response.data.errorRecords.length !== 0) {
+          setConversionError(response.data.errorRecords)
+          const correctedTitles = removeErroneousTitles(response.data.titles, response.data.errorRecords)
+          setConvertedTitles(correctedTitles)
+        } else {
+          setConvertedTitles(response.data.titles)
+        }     
         setChecked(new Array(response.data.titles.length).fill(true))
-        setConversionError(response.data.errorRecords)
         console.log(response)
       }).catch(error => {
         console.log(error)
@@ -118,7 +133,11 @@ const App = () => {
       method: "POST",
       //TODO: portti 4000 pelkkään nodeen, 3000 dockeroituun usemarconiin!
       url: "http://localhost:3000/tokoha",
-      data: bibliosToPost
+      data: {
+        biblios: bibliosToPost,
+        titles: convertedTitles,
+        bibliosWithErrors: conversionError
+      }  
     }).then((response) => {
       setKohaSuccess(true)
       setBiblionumbers(response.data.biblionumbers)

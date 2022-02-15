@@ -1,7 +1,7 @@
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
-const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checked, setChecked}) => {
+const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checked, setChecked }) => {
 
     const handleRadioChange = (index) => {
         const updatedChecked = checked.map((item, i) => i === index ? !item : item)
@@ -19,13 +19,13 @@ const MarcList = ({ postedToKoha, umSuccess, convertedTitles, postToKoha, checke
             <>
                 <p>Konvertoidut tietueet</p>
                 <Form.Check
-                            type="checkbox"
-                            className="mb-5"
-                            label="Valitse kaikki"
-                            key="toggle"
-                            defaultChecked
-                            onChange={() => toggleAll()}
-                        />
+                    type="checkbox"
+                    className="mb-5"
+                    label="Valitse kaikki"
+                    key="toggle"
+                    defaultChecked
+                    onChange={() => toggleAll()}
+                />
                 {
                     convertedTitles.map((title, index) =>
                         <Form.Check
