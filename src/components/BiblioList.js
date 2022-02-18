@@ -1,7 +1,7 @@
 import ListGroup from "react-bootstrap/ListGroup"
 import Alert from "react-bootstrap/Alert"
 
-const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) => {
+const BiblioList = ({ kohaSuccess, biblios, convertedTitles, checked }) => {
 
     let postedTitles = []
 
@@ -15,13 +15,11 @@ const BiblioList = ({ kohaSuccess, biblionumbers, convertedTitles, checked }) =>
         return (
                 <ListGroup className="pb-5">
                     {
-                        biblionumbers.map((biblionumber, index) => {
-
-                            const title = postedTitles[index]
-
+                        biblios.map((biblio) => {
+                            const title = biblio.title
                             return (
-                                <ListGroup.Item key={biblionumber}>
-                                    {title} <a href={`https://app1.jyu.koha.csc.fi/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`} target="_blank" rel="noreferrer">{`https://app1.jyu.koha.csc.fi/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`}</a>
+                                <ListGroup.Item key={biblio.url}>
+                                    {title} <a href={biblio.url} target="_blank" rel="noreferrer">{biblio.url}</a>
                                 </ListGroup.Item>)
                         })
                     }

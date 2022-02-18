@@ -39,18 +39,17 @@ const App = () => {
   const [conversionMessage, setConversionMessage] = useState("")
   const [convertedTitles, setConvertedTitles] = useState([])
   const [conversionError, setConversionError] = useState([])
-  const [checked, setChecked] = useState("")
+  const [checked, setChecked] = useState([])
+  const [checkedTitles, setCheckedTitles] = useState([])
   const [postedToKoha, setPostedToKoha] = useState(false)
   const [kohaSuccess, setKohaSuccess] = useState()
-  const [biblionumbers, setBiblionumbers] = useState([])
+  const [biblios, setBiblios] = useState([])
   
   const handleFile = (event) => {
     const file = event.target.files[0]
-    console.log("file.type", file.type)
     if (fileTypeValid(file)) {
       setFile(file)
       setFileType(file.type)
-      console.log(file.name)
     } else {
       alert(`Virheellinen tiedostotyyppi! ${file.type}`)
       event.target.value = null
@@ -68,15 +67,14 @@ const App = () => {
 
   const handleVendor = (event) => {
     setVendor(event.target.value)
-    console.log(event.target.value)
   }
 
   const removeErroneousTitles = (titles, recordsWithError) => {
-    console.log("aluksi titles", titles)
+    let errorTitles = []
     for (let i = 0; i < recordsWithError.length; i++) {
-      const index = recordsWithError[i]
+      const index = recordsWithError[i].titleNumber
+      errorTitles.push(titles[index-1])
       titles.splice(index-1, 1)
-      console.log("lopuksi titles", titles)
     }
     return titles
   }
@@ -104,15 +102,14 @@ const App = () => {
         setVendor()
         setUmSuccess(true)
         setConversionMessage(response.data.conversionMessage)
+        let titles = response.data.titles
         if (response.data.errorRecords.length !== 0) {
           setConversionError(response.data.errorRecords)
-          const correctedTitles = removeErroneousTitles(response.data.titles, response.data.errorRecords)
-          setConvertedTitles(correctedTitles)
-        } else {
-          setConvertedTitles(response.data.titles)
-        }     
-        setChecked(new Array(response.data.titles.length).fill(true))
-        console.log(response)
+          titles = removeErroneousTitles(response.data.titles, response.data.errorRecords)
+        }       
+        setConvertedTitles(titles)
+        setCheckedTitles(titles)
+        setChecked(new Array(titles.length).fill(true))
       }).catch(error => {
         console.log(error)
         setUmSuccess(false)
@@ -120,9 +117,9 @@ const App = () => {
     }
   }
 
-  const postToKoha = (bibliosToPost) => {
+  const postToKoha = (titlesToPost) => {
 
-    if (!bibliosToPost.includes(true)) {
+    if (titlesToPost.length === 0) {
       alert("Valitse ainakin yksi tietue!")
       return
     }
@@ -131,17 +128,13 @@ const App = () => {
 
     axios({
       method: "POST",
-      //TODO: portti 4000 pelkkään nodeen, 3000 dockeroituun usemarconiin!
       url: "http://localhost:3000/tokoha",
       data: {
-        biblios: bibliosToPost,
-        titles: convertedTitles,
-        bibliosWithErrors: conversionError
+        titles: titlesToPost
       }  
     }).then((response) => {
       setKohaSuccess(true)
-      setBiblionumbers(response.data.biblionumbers)
-      console.log(response.data.biblionumbers)
+      setBiblios(response.data.biblios)
     }).catch(error => {
       console.log(error.response.data.error)
       setKohaSuccess(error.response.data.error)
@@ -156,8 +149,8 @@ const App = () => {
         <Container><CustomAlert authorized={authorized} apiError={apiError} conversionError={conversionError} marcSent={marcSent} postedToKoha={postedToKoha} kohaSuccess={kohaSuccess} umSuccess={umSuccess} conversionMessage={conversionMessage}></CustomAlert></Container>
         <UploadForm authorized={authorized} marcSent={marcSent} handleFile={handleFile} handleVendor={handleVendor} sendFile={sendFile}></UploadForm>
         <Form style={{ display: authorized ? 'block' : 'none' }}>
-          <Container><MarcList umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
-          <Container><BiblioList kohaSuccess={kohaSuccess} biblionumbers={biblionumbers} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
+          <Container><MarcList checkedTitles={checkedTitles} setCheckedTitles={setCheckedTitles} umSuccess={umSuccess} postedToKoha={postedToKoha} convertedTitles={convertedTitles} postToKoha={postToKoha} checked={checked} setChecked={setChecked}></MarcList></Container>
+          <Container><BiblioList kohaSuccess={kohaSuccess} biblios={biblios} convertedTitles={convertedTitles} checked={checked}></BiblioList></Container>
           <Container><Button variant="secondary" type="submit" className="mb-5 mt-5">Aloita alusta</Button></Container>
         </Form>
       </Stack>

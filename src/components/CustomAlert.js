@@ -2,6 +2,21 @@ import Alert from "react-bootstrap/Alert"
 
 const CustomAlert = ({ authorized, apiError, conversionError, postedToKoha, kohaSuccess, marcSent, umSuccess, conversionMessage }) => {
 
+    let titleNumbers = []
+    let titles = []
+
+    for (let i = 0; i < conversionError.length; i++){
+        titleNumbers.push(conversionError[i].titleNumber)
+        titles.push(conversionError[i].title)
+    }
+
+    let errorMessageTitles = ""
+    if (conversionError.length === 1) {
+        errorMessageTitles = `Tietue nro ${titleNumbers.join(", ")}, nimeke ${titles.join(", ")}`
+    } if (conversionError.length > 1) {
+        errorMessageTitles = `Tietueet nro ${titleNumbers.join(", ")}, nimekkeet ${titles.join(", ")}`
+    }
+
     if (apiError) {
         return <Alert variant="danger">Virhe Marccerin toiminnassa.</Alert>
     }
@@ -21,7 +36,7 @@ const CustomAlert = ({ authorized, apiError, conversionError, postedToKoha, koha
     if (umSuccess && conversionError.length !== 0) {
         return (
             <div className="alert alert-danger" role="alert">
-                <h4 className="alert-heading">Konversion tulos sisältää virheitä tietueissa nro {conversionError.join(", ")}</h4>
+                <h4 className="alert-heading">Konversion tulos sisältää virheitä: {errorMessageTitles}</h4>
                 <p>{conversionMessage}</p>
             </div>
         )
