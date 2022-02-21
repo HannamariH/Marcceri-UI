@@ -11,7 +11,7 @@ const BiblioList = ({ kohaSuccess, biblios, convertedTitles, checked }) => {
         }
     }
 
-    if (kohaSuccess === true) {
+    if (biblios.length !== 0) {
         return (
                 <ListGroup className="pb-5">
                     {

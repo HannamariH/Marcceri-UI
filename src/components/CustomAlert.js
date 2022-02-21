@@ -26,7 +26,7 @@ const CustomAlert = ({ authorized, apiError, conversionError, postedToKoha, koha
     if (marcSent && umSuccess === undefined) {
         return <Alert variant="info">Tietueiden konvertointi käynnissä...</Alert>
     }
-    if (kohaSuccess) {
+    if (kohaSuccess === true) {
         return <Alert variant="success">Seuraavat tietueet tallennettu Kohaan:</Alert>
     }
     if (postedToKoha && !kohaSuccess) {
