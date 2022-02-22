@@ -16,7 +16,7 @@ const App = () => {
 
   //tarkistaa, että käyttäjän sähköpostiosoite on sallittujen joukossa (ja että api on käynnissä)
   const checkUser = () => {
-    axios.get("/marcceri/api/auth")
+    axios.get("/s/marcceri/api/auth")
       .then(() => {
         setAuthorized(true)
       })
@@ -92,7 +92,7 @@ const App = () => {
 
       axios({
         method: "POST",
-        url: "/marcceri/api/convert",
+        url: "/s/marcceri/api/convert",
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data"
@@ -128,7 +128,7 @@ const App = () => {
 
     axios({
       method: "POST",
-      url: "marcceri/api/tokoha",
+      url: "/s/marcceri/api/tokoha",
       data: {
         titles: titlesToPost
       }  
